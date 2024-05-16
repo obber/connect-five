@@ -1,5 +1,5 @@
 {
-  "name": "@c5/utils",
+  "name": "@c5/game-logic",
   "version": "0.0.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -13,11 +13,18 @@
     "build": "tsup src/index.ts --format esm,cjs --dts",
     "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
     "lint": "eslint src/",
-    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@c5/utils": "*",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2"
   },
   "devDependencies": {
     "@c5/eslint-config-custom": "*",
     "@c5/tsconfig": "*",
+    "ts-jest": "^29.1.2",
     "tsup": "^8.0.1",
     "typescript": "^5.3.2"
   }
