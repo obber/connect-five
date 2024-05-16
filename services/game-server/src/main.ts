@@ -1,4 +1,4 @@
-import { LogLevel, Logger, ValidationPipe } from "@nestjs/common";
+import { type LogLevel, Logger, ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { SwaggerModule } from "@nestjs/swagger";
 import { AppModule } from "./app.module";
@@ -29,5 +29,5 @@ async function bootstrap() {
   await app.listen(port);
 }
 bootstrap().catch((err) => {
-  console.error("Failed to bootstrap server. err = ", err);
+  logger.error("Failed to bootstrap server. err = ", err);
 });

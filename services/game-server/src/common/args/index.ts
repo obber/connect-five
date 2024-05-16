@@ -1,7 +1,8 @@
-import commandLineArgs, {
+import type {
   CommandLineOptions,
   OptionDefinition,
 } from "command-line-args";
+import commandLineArgs from "command-line-args";
 
 const CLI_ARGS_DEFINITION: OptionDefinition[] = [
   { name: "gen_api_client", type: Boolean },

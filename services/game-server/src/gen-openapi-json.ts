@@ -1,8 +1,11 @@
 import fs from "node:fs";
 import path from "node:path";
 import { NestFactory } from "@nestjs/core";
+import { Logger } from "@nestjs/common";
 import { AppModule } from "./app.module";
 import { createSwaggerDocument } from "./swagger";
+
+const logger = new Logger("gen-openapi-json");
 
 (async () => {
   const app = await NestFactory.create(AppModule);
@@ -13,5 +16,5 @@ import { createSwaggerDocument } from "./swagger";
     JSON.stringify(document)
   );
 })().catch((err) => {
-  console.error("Failed to write OpenAPI JSON. err = ", err);
+  logger.error("Failed to write OpenAPI JSON. err = ", err);
 });
