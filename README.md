@@ -17,7 +17,7 @@ Some key things:
 Run the following:
 
 ```
-cd services/api
+cd services/game-server
 cp .env.sample .env
 ```
 

@@ -1,0 +1,31 @@
+{
+  "name": "@c5/api-client",
+  "version": "0.0.1",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "license": "MIT",
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "build": "tsup gen/index.ts --format esm,cjs --dts",
+    "dev": "tsup gen/index.ts --format esm,cjs --watch --dts",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+  },
+  "peerDependencies": {
+    "axios": "^1.6.2",
+    "@types/axios": "^0.14.0"
+  },
+  "devDependencies": {
+    "@c5/game-server": "*",
+    "@c5/tsconfig": "*",
+    "eslint-config-custom": "*",
+    "tsup": "*",
+    "typescript": "*"
+  },
+  "dependencies": {
+    "class-validator": "^0.14.0"
+  }
+}
