@@ -21,14 +21,17 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@c5/connection": "*",
+    "@c5/utils": "*",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.1.1",
     "@nestjs/core": "^10.0.0",
     "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/platform-socket.io": "^10.3.8",
     "@nestjs/swagger": "^7.1.16",
+    "@nestjs/websockets": "^10.3.8",
     "@sendgrid/mail": "^8.1.0",
     "@types/pg": "^8.10.9",
-    "@c5/utils": "*",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "command-line-args": "^5.2.1",
@@ -38,9 +41,12 @@
     "firebase-admin": "^12.0.0",
     "pg": "^8.11.3",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "socket.io": "^4.7.5"
   },
   "devDependencies": {
+    "@c5/eslint-config-custom": "*",
+    "@c5/tsconfig": "*",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
@@ -51,8 +57,6 @@
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
-    "@c5/eslint-config-custom": "*",
-    "@c5/tsconfig": "*",
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
