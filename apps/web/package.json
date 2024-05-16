@@ -11,6 +11,9 @@
     "test": "yarn jest --passWithNoTests"
   },
   "dependencies": {
+    "@c5/api-client": "*",
+    "@c5/connection": "*",
+    "@c5/utils": "*",
     "@emotion/css": "^11.11.2",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
@@ -32,8 +35,6 @@
     "@tanstack/react-query-devtools": "^5.9.0",
     "@types/lodash": "^4.14.202",
     "@types/uuid": "^9.0.7",
-    "@c5/api-client": "*",
-    "@c5/utils": "*",
     "axios": "^1.6.2",
     "classnames": "^2.3.2",
     "csstype": "^3.1.3",
@@ -48,12 +49,15 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.49.3",
+    "socket.io-client": "^4.7.5",
     "tailwindcss": "^3.3.5",
     "ts-node": "^10.9.1",
     "uuid": "^9.0.1",
     "zustand": "^4.4.7"
   },
   "devDependencies": {
+    "@c5/eslint-config-custom": "*",
+    "@c5/tsconfig": "*",
     "@jest/globals": "^29.7.0",
     "@next/eslint-plugin-next": "^14.0.3",
     "@testing-library/jest-dom": "^6.1.4",
@@ -62,8 +66,6 @@
     "@types/node": "^20.10.1",
     "@types/react": "^18.2.39",
     "@types/react-dom": "^18.2.17",
-    "@c5/eslint-config-custom": "*",
-    "@c5/tsconfig": "*",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "ts-jest": "^29.1.1",
