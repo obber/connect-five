@@ -1,5 +1,6 @@
 import { GameLogic } from "./game-logic";
 import { Tile } from "./tile";
+import { PlaceResult } from "./types";
 
 const PLAYER_1 = "player-1-id";
 const PLAYER_2 = "player-2-id";
@@ -17,7 +18,7 @@ describe("GameLogic", () => {
     logic.play(PLAYER_2, Tile.A4);
     expect(logic.play(PLAYER_1, Tile.J8)).toEqual({
       winner: PLAYER_1,
-      placed: true,
+      result: PlaceResult.Success,
     });
   });
 
@@ -47,7 +48,7 @@ describe("GameLogic", () => {
     logic.play(PLAYER_2, Tile.A4);
     expect(logic.play(PLAYER_1, Tile.H10)).toEqual({
       winner: PLAYER_1,
-      placed: true,
+      result: PlaceResult.Success,
     });
   });
 
@@ -63,7 +64,7 @@ describe("GameLogic", () => {
     logic.play(PLAYER_2, Tile.A4);
     expect(logic.play(PLAYER_1, Tile.L8)).toEqual({
       winner: PLAYER_1,
-      placed: true,
+      result: PlaceResult.Success,
     });
   });
 
@@ -79,7 +80,7 @@ describe("GameLogic", () => {
     logic.play(PLAYER_2, Tile.A4);
     expect(logic.play(PLAYER_1, Tile.L12)).toEqual({
       winner: PLAYER_1,
-      placed: true,
+      result: PlaceResult.Success,
     });
   });
 });
