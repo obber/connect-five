@@ -1,0 +1,7 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Merges should be handled via CLI (`yarn i --mode update-lockfile` or just `yarn`)
+yarn.lock -diff -merge
+# This isn't shown by default anyway due to size, but bloats line counts
+yarn.lock linguist-generated=true
