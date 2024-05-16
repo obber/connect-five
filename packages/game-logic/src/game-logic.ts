@@ -1,45 +1,46 @@
 import { Board } from "./board";
-import { Player } from "./types";
+import { Player, PlaceResult } from "./types";
 import type { TileKey } from "./tile";
 
 export class GameLogic {
-  private turn: string;
+  private turn = Player.Player1;
+  private playerIds = new Map<Player, string>();
   private board = new Board();
 
-  constructor(
-    private player1Id: string,
-    private player2Id: string
-  ) {
-    this.turn = player1Id;
+  constructor(player1Id: string, player2Id: string) {
+    this.playerIds.set(Player.Player1, player1Id);
+    this.playerIds.set(Player.Player2, player2Id);
   }
 
   play(
     playerId: string,
     tile: TileKey
-  ): { winner: string | null; placed: boolean } {
-    if (playerId !== this.turn) {
+  ): { winner: string | null; result: PlaceResult } {
+    if (this.playerIds.get(this.turn) !== playerId) {
       // Invalid player, do nothing.
-      return { winner: null, placed: false };
+      return { winner: null, result: PlaceResult.OutOfTurn };
     }
 
-    const placed = this.board.place(
-      playerId === this.player1Id ? Player.Player1 : Player.Player2,
-      tile
-    );
-    if (!placed) {
-      throw new Error("Unexpected player");
+    const result = this.board.place(this.turn, tile);
+    if (result === PlaceResult.Conflict) {
+      return { winner: null, result };
     }
+
     if (this.board.checkWinner(tile)) {
       return {
-        winner: this.turn,
-        placed: true,
+        winner: playerId,
+        result: PlaceResult.Success,
       };
     }
 
-    this.turn = this.turn === this.player1Id ? this.player2Id : this.player1Id;
+    this.toggleTurn();
     return {
       winner: null,
-      placed: true,
+      result: PlaceResult.Success,
     };
+  }
+
+  private toggleTurn() {
+    this.turn === Player.Player1 ? Player.Player2 : Player.Player1;
   }
 }

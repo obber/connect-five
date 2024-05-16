@@ -2,6 +2,7 @@ import { get, getx, isNullOrUndefined } from "@c5/utils";
 import {
   AxisDirection,
   Direction,
+  PlaceResult,
   type BoardState,
   type Player,
 } from "./types";
@@ -17,16 +18,16 @@ export class Board {
     return this.state.map((rows) => rows.map((column) => column));
   }
 
-  place(player: Player, tile: TileKey) {
+  place(player: Player, tile: TileKey): PlaceResult {
     if (this.isTaken(tile)) {
-      return false;
+      return PlaceResult.Conflict;
     }
 
     const { rowIndex, columnIndex } = getIndicesForTile(tile);
     const row = getx(this.state, rowIndex);
     row[columnIndex] = player;
 
-    return true;
+    return PlaceResult.Success;
   }
 
   checkWinner(lastTile: TileKey): boolean {

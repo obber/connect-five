@@ -1,3 +1,9 @@
+export enum PlaceResult {
+  OutOfTurn = "OutOfTurn",
+  Conflict = "Conflict",
+  Success = "Success",
+}
+
 export enum Player {
   Player1 = 0,
   Player2 = 1,
