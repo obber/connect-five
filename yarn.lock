@@ -5474,7 +5474,7 @@ firebase-admin@^12.0.0:
     "@google-cloud/firestore" "^7.1.0"
     "@google-cloud/storage" "^7.7.0"
 
-firebase@^10.7.1:
+firebase@^10.12.0, firebase@^10.7.1:
   version "10.12.0"
   resolved "https://registry.yarnpkg.com/firebase/-/firebase-10.12.0.tgz#4bcbbfb5bbd3f817c077897b065be814e7b8ad68"
   integrity sha512-31UZyAK0+VZmF9jR/+6g31uyqWjBKsG+TV3ndRJEkw6+Skctb5ZX0+Ezq/pbC68iIRJ5TujOjyl632vTOqyS1w==
