@@ -1,10 +1,26 @@
 import type { TileKey } from "@c5/connection";
 import { Board } from "./board";
+import type { BoardState } from "./types";
 import { PlaceResult } from "./types";
+
+export type PlayedState<T extends symbol> =
+  | ErrorPlayedState
+  | SuccessPlayedState<T>;
+
+interface ErrorPlayedState {
+  winner: null;
+  result: PlaceResult.Conflict | PlaceResult.OutOfTurn;
+}
+
+interface SuccessPlayedState<T extends symbol> {
+  result: PlaceResult.Success;
+  winner: T | null;
+  board: BoardState<T>;
+}
 
 export class GameLogic<T extends symbol> {
   private turn: T;
-  private board = new Board();
+  private board = new Board<T>();
 
   constructor(
     private player1Id: T,
@@ -13,7 +29,7 @@ export class GameLogic<T extends symbol> {
     this.turn = player1Id;
   }
 
-  play(playerId: T, tile: TileKey): { winner: T | null; result: PlaceResult } {
+  play(playerId: T, tile: TileKey): PlayedState<T> {
     if (playerId !== this.turn) {
       return {
         winner: null,
@@ -30,12 +46,14 @@ export class GameLogic<T extends symbol> {
     if (this.board.checkWinner(tile)) {
       return {
         winner: playerId,
+        board: this.board.get(),
         result: PlaceResult.Success,
       };
     }
 
     return {
       winner: null,
+      board: this.board.get(),
       result: PlaceResult.Success,
     };
   }
