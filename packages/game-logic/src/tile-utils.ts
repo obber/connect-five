@@ -1,5 +1,5 @@
+import type { TileKey } from "@c5/connection";
 import { isNullOrUndefined } from "@c5/utils";
-import type { TileKey } from "./tile";
 
 const CHAR_CODE_FOR_A = 65;
 const ONE_BASED_INDEX_OFFSET = 1;

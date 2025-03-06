@@ -1,13 +1,41 @@
+import { Tile } from "@c5/connection";
 import { GameLogic } from "./game-logic";
-import { Tile } from "./tile";
 import { PlaceResult } from "./types";
 
-const PLAYER_1 = "player-1-id";
-const PLAYER_2 = "player-2-id";
+const PLAYER_1 = Symbol("player-1");
+const PLAYER_2 = Symbol("player-2");
 
 describe("GameLogic", () => {
+  it("should not allow out of turn players", () => {
+    const logic = new GameLogic<typeof PLAYER_1 | typeof PLAYER_2>(
+      PLAYER_1,
+      PLAYER_2
+    );
+    logic.play(PLAYER_1, Tile.J10);
+    expect(logic.play(PLAYER_1, Tile.J11)).toEqual({
+      winner: null,
+      result: PlaceResult.OutOfTurn,
+    });
+  });
+
+  it("should not allow taking the same tile twice", () => {
+    const logic = new GameLogic<typeof PLAYER_1 | typeof PLAYER_2>(
+      PLAYER_1,
+      PLAYER_2
+    );
+    logic.play(PLAYER_1, Tile.J10);
+    logic.play(PLAYER_2, Tile.J11);
+    expect(logic.play(PLAYER_1, Tile.J10)).toEqual({
+      winner: null,
+      result: PlaceResult.Conflict,
+    });
+  });
+
   it("should end the game as expected when player 1 wins", () => {
-    const logic = new GameLogic(PLAYER_1, PLAYER_2);
+    const logic = new GameLogic<typeof PLAYER_1 | typeof PLAYER_2>(
+      PLAYER_1,
+      PLAYER_2
+    );
     logic.play(PLAYER_1, Tile.J10);
     logic.play(PLAYER_2, Tile.A1);
     logic.play(PLAYER_1, Tile.J11);
@@ -23,7 +51,10 @@ describe("GameLogic", () => {
   });
 
   it("should end the game as expected when player 2 wins", () => {
-    const logic = new GameLogic(PLAYER_1, PLAYER_2);
+    const logic = new GameLogic<typeof PLAYER_1 | typeof PLAYER_2>(
+      PLAYER_1,
+      PLAYER_2
+    );
     logic.play(PLAYER_1, Tile.J10);
     logic.play(PLAYER_2, Tile.A1);
     logic.play(PLAYER_1, Tile.J11);
@@ -37,7 +68,10 @@ describe("GameLogic", () => {
   });
 
   it("should end the game in the vertical direction", () => {
-    const logic = new GameLogic(PLAYER_1, PLAYER_2);
+    const logic = new GameLogic<typeof PLAYER_1 | typeof PLAYER_2>(
+      PLAYER_1,
+      PLAYER_2
+    );
     logic.play(PLAYER_1, Tile.J10);
     logic.play(PLAYER_2, Tile.A1);
     logic.play(PLAYER_1, Tile.K10);
@@ -53,7 +87,10 @@ describe("GameLogic", () => {
   });
 
   it("should end the game in the diagonal up direction", () => {
-    const logic = new GameLogic(PLAYER_1, PLAYER_2);
+    const logic = new GameLogic<typeof PLAYER_1 | typeof PLAYER_2>(
+      PLAYER_1,
+      PLAYER_2
+    );
     logic.play(PLAYER_1, Tile.J10);
     logic.play(PLAYER_2, Tile.A1);
     logic.play(PLAYER_1, Tile.I11);
@@ -69,7 +106,10 @@ describe("GameLogic", () => {
   });
 
   it("should end the game in the diagonal down direction", () => {
-    const logic = new GameLogic(PLAYER_1, PLAYER_2);
+    const logic = new GameLogic<typeof PLAYER_1 | typeof PLAYER_2>(
+      PLAYER_1,
+      PLAYER_2
+    );
     logic.play(PLAYER_1, Tile.J10);
     logic.play(PLAYER_2, Tile.A1);
     logic.play(PLAYER_1, Tile.I9);

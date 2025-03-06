@@ -1,27 +1,28 @@
+import type { TileKey } from "@c5/connection";
 import { Board } from "./board";
-import { Player, PlaceResult } from "./types";
-import type { TileKey } from "./tile";
+import { PlaceResult } from "./types";
 
-export class GameLogic {
-  private turn = Player.Player1;
-  private playerIds = new Map<Player, string>();
+export class GameLogic<T extends symbol> {
+  private turn: T;
   private board = new Board();
 
-  constructor(player1Id: string, player2Id: string) {
-    this.playerIds.set(Player.Player1, player1Id);
-    this.playerIds.set(Player.Player2, player2Id);
+  constructor(
+    private player1Id: T,
+    private player2Id: T
+  ) {
+    this.turn = player1Id;
   }
 
-  play(
-    playerId: string,
-    tile: TileKey
-  ): { winner: string | null; result: PlaceResult } {
-    if (this.playerIds.get(this.turn) !== playerId) {
-      // Invalid player, do nothing.
-      return { winner: null, result: PlaceResult.OutOfTurn };
+  play(playerId: T, tile: TileKey): { winner: T | null; result: PlaceResult } {
+    if (playerId !== this.turn) {
+      return {
+        winner: null,
+        result: PlaceResult.OutOfTurn,
+      };
     }
+    const result = this.board.place(playerId, tile);
+    this.toggleTurn();
 
-    const result = this.board.place(this.turn, tile);
     if (result === PlaceResult.Conflict) {
       return { winner: null, result };
     }
@@ -33,7 +34,6 @@ export class GameLogic {
       };
     }
 
-    this.toggleTurn();
     return {
       winner: null,
       result: PlaceResult.Success,
@@ -41,6 +41,6 @@ export class GameLogic {
   }
 
   private toggleTurn() {
-    this.turn === Player.Player1 ? Player.Player2 : Player.Player1;
+    this.turn = this.turn === this.player1Id ? this.player2Id : this.player1Id;
   }
 }

@@ -4,12 +4,7 @@ export enum PlaceResult {
   Success = "Success",
 }
 
-export enum Player {
-  Player1 = 0,
-  Player2 = 1,
-}
-
-export type BoardState = (null | Player)[][];
+export type BoardState<T extends symbol> = (null | T)[][];
 
 export enum AxisDirection {
   /** UpLeft to DownRight */

@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@c5/connection": "*",
+    "@c5/game-logic": "*",
     "@c5/utils": "*",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.1.1",

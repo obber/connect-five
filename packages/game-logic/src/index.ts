@@ -1,2 +1,2 @@
 export * from "./game-logic";
-export * from "./tile";
+export { PlaceResult } from "./types";

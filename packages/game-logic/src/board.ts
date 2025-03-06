@@ -1,24 +1,23 @@
 import { get, getx, isNullOrUndefined } from "@c5/utils";
+import type { TileKey } from "@c5/connection";
 import {
   AxisDirection,
   Direction,
   PlaceResult,
   type BoardState,
-  type Player,
 } from "./types";
-import type { TileKey } from "./tile";
 import { getIndicesForTile } from "./tile-utils";
 
 const OUT_OF_RANGE = "OUT OF RANGE";
 
-export class Board {
-  private state: BoardState = createEmptyBoardState();
+export class Board<T extends symbol> {
+  private state: BoardState<T> = createEmptyBoardState();
 
-  get(): BoardState {
+  get(): BoardState<T> {
     return this.state.map((rows) => rows.map((column) => column));
   }
 
-  place(player: Player, tile: TileKey): PlaceResult {
+  place(player: T, tile: TileKey): PlaceResult {
     if (this.isTaken(tile)) {
       return PlaceResult.Conflict;
     }
@@ -38,7 +37,7 @@ export class Board {
     return this.getTileValue(tile) !== null;
   }
 
-  private getTileValue(tile: TileKey): Player | null | typeof OUT_OF_RANGE {
+  private getTileValue(tile: TileKey): T | null | typeof OUT_OF_RANGE {
     const { rowIndex, columnIndex } = getIndicesForTile(tile);
     return this.getTileValueAtIndices(rowIndex, columnIndex);
   }
@@ -46,7 +45,7 @@ export class Board {
   private getTileValueAtIndices(
     rowIndex: number,
     columnIndex: number
-  ): Player | null | typeof OUT_OF_RANGE {
+  ): T | null | typeof OUT_OF_RANGE {
     const row = get(this.state, rowIndex);
     if (isNullOrUndefined(row)) {
       return OUT_OF_RANGE;
