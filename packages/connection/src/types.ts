@@ -12,6 +12,7 @@ export interface ServerToClientEvents {
 
 export interface ToggleTurnPayload {
   yourTurn: boolean;
+  board: RelativePlayer[][];
 }
 
 export interface ClientToServerEvents {
@@ -31,4 +32,9 @@ export interface InterServerEvents {
 export interface SocketData {
   name: string;
   age: number;
+}
+
+export enum RelativePlayer {
+  YOU = 0,
+  THEM = 1,
 }

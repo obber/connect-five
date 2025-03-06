@@ -103,8 +103,16 @@ export class Game {
     const { player, oppont } = this.getBoth(nextTurnPlayerId);
     player.turn = true;
     oppont.turn = false;
-    player.socket.emit("toggleTurn", { yourTurn: true });
-    oppont.socket.emit("toggleTurn", { yourTurn: false });
+    player.socket.emit("toggleTurn", {
+      yourTurn: true,
+      // TODO: Map this to board state.
+      board: [],
+    });
+    oppont.socket.emit("toggleTurn", {
+      yourTurn: false,
+      // TODO: Map this to board state.
+      board: [],
+    });
   }
 
   private getBoth(playerId: PlayerIdentifier) {
