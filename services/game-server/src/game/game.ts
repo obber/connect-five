@@ -1,6 +1,8 @@
 import type { Socket } from "socket.io";
+import { InvalidMoveType, RelativePlayer } from "@c5/connection";
 import type {
   ClientToServerEvents,
+  PlayerBoardState,
   PlayerTurnPayload,
   ServerToClientEvents,
 } from "@c5/connection";
@@ -61,29 +63,39 @@ export class Game {
   ) {
     const { result, winner } = this.gameLogic.play(playerId, tileKey);
 
-    // TODO: Add an enum to c5/connection for denoting YOU vs THEM on the board
-    // state. Then, map the playerId symbols to a 2-d array of
-    // RelativePlayer.YOU vs RelativePlayer.THEM.
-    //
-    // That will make sure that each client only needs to account for YOU or
-    // THEM, regardless of which player they are (player 1 or player 2).
-
     if (result === PlaceResult.OutOfTurn) {
-      // Invalid move
+      this.socket(playerId).emit("invalidMove", {
+        type: InvalidMoveType.OutOfTurn,
+      });
       return;
     }
 
     if (result === PlaceResult.Conflict) {
-      // Invalid move
+      this.socket(playerId).emit("invalidMove", {
+        type: InvalidMoveType.Conflict,
+      });
       return;
     }
 
     if (isNotNullOrUndefined(winner)) {
-      // End game
+      this.endGame({ winnerId: winner });
       return;
     }
 
     this.doTurn(this.getOpponentPlayerId(playerId));
+  }
+
+  private endGame({ winnerId }: { winnerId: PlayerIdentifier }) {
+    const loserId = this.getOpponentPlayerId(winnerId);
+    const { player: winner, oppont: loser } = this.getBoth(winnerId);
+    winner.socket.emit("gameEnd", {
+      win: true,
+      board: this.getPlayerBoardState(winnerId),
+    });
+    loser.socket.emit("gameEnd", {
+      win: false,
+      board: this.getPlayerBoardState(loserId),
+    });
   }
 
   private maybeInitializeTurns() {
@@ -105,13 +117,13 @@ export class Game {
     oppont.turn = false;
     player.socket.emit("toggleTurn", {
       yourTurn: true,
-      // TODO: Map this to board state.
-      board: [],
+      board: this.getPlayerBoardState(nextTurnPlayerId),
     });
     oppont.socket.emit("toggleTurn", {
       yourTurn: false,
-      // TODO: Map this to board state.
-      board: [],
+      board: this.getPlayerBoardState(
+        this.getOpponentPlayerId(nextTurnPlayerId)
+      ),
     });
   }
 
@@ -141,5 +153,20 @@ export class Game {
 
   private socket(player: PlayerIdentifier) {
     return this.state[player].socket;
+  }
+
+  private getPlayerBoardState(playerId: PlayerIdentifier): PlayerBoardState {
+    const opponentId = this.getOpponentPlayerId(playerId);
+    return this.gameLogic.getBoard().map((row) => {
+      return row.map((cell) => {
+        if (cell === playerId) {
+          return RelativePlayer.YOU;
+        }
+        if (cell === opponentId) {
+          return RelativePlayer.THEM;
+        }
+        return null;
+      });
+    });
   }
 }

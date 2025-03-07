@@ -7,12 +7,27 @@ export interface ServerToClientEvents {
 
   initGame: () => void;
   toggleTurn: (payload: ToggleTurnPayload) => void;
-  gameEnd: (winnerId: string) => void;
+  invalidMove: (payload: InvalidMovePayload) => void;
+  gameEnd: (payload: GameEndPayload) => void;
+}
+
+export interface GameEndPayload {
+  win: boolean;
+  board: PlayerBoardState;
 }
 
 export interface ToggleTurnPayload {
   yourTurn: boolean;
-  board: RelativePlayer[][];
+  board: PlayerBoardState;
+}
+
+export interface InvalidMovePayload {
+  type: InvalidMoveType;
+}
+
+export enum InvalidMoveType {
+  Conflict = "Conflict",
+  OutOfTurn = "OutOfTurn",
 }
 
 export interface ClientToServerEvents {
@@ -38,3 +53,5 @@ export enum RelativePlayer {
   YOU = 0,
   THEM = 1,
 }
+
+export type PlayerBoardState = (RelativePlayer | null)[][];

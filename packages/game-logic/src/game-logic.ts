@@ -3,19 +3,9 @@ import { Board } from "./board";
 import type { BoardState } from "./types";
 import { PlaceResult } from "./types";
 
-export type PlayedState<T extends symbol> =
-  | ErrorPlayedState
-  | SuccessPlayedState<T>;
-
-interface ErrorPlayedState {
-  winner: null;
-  result: PlaceResult.Conflict | PlaceResult.OutOfTurn;
-}
-
-interface SuccessPlayedState<T extends symbol> {
-  result: PlaceResult.Success;
+interface PlayedState<T extends symbol> {
   winner: T | null;
-  board: BoardState<T>;
+  result: PlaceResult.Conflict | PlaceResult.OutOfTurn | PlaceResult.Success;
 }
 
 export class GameLogic<T extends symbol> {
@@ -46,16 +36,18 @@ export class GameLogic<T extends symbol> {
     if (this.board.checkWinner(tile)) {
       return {
         winner: playerId,
-        board: this.board.get(),
         result: PlaceResult.Success,
       };
     }
 
     return {
       winner: null,
-      board: this.board.get(),
       result: PlaceResult.Success,
     };
+  }
+
+  getBoard(): BoardState<T> {
+    return this.board.get();
   }
 
   private toggleTurn() {
