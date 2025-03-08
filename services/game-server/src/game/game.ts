@@ -18,9 +18,15 @@ interface PlayerState {
   socket: Socket<ClientToServerEvents, ServerToClientEvents>;
 }
 
+interface OnEndInternalPayload {
+  winnerSocket: Socket<ClientToServerEvents, ServerToClientEvents>;
+}
+
 export class Game {
   private state: Record<PlayerIdentifier, PlayerState>;
   private gameLogic: GameLogic<PlayerIdentifier>;
+  private onEndCallback?: (params: OnEndInternalPayload) => void;
+
   constructor(
     player1: Socket<ClientToServerEvents, ServerToClientEvents>,
     player2: Socket<ClientToServerEvents, ServerToClientEvents>
@@ -40,7 +46,12 @@ export class Game {
     this.gameLogic = new GameLogic<PlayerIdentifier>(PLAYER_1, PLAYER_2);
   }
 
-  initialize(): this {
+  initialize({
+    onEndCallback,
+  }: {
+    onEndCallback: (params: OnEndInternalPayload) => void;
+  }): this {
+    this.onEndCallback = onEndCallback;
     this.socket(PLAYER_1).emit("initGame");
     this.socket(PLAYER_2).emit("initGame");
     this.socket(PLAYER_1).on("initGameAck", () => {
@@ -61,7 +72,7 @@ export class Game {
     playerId: PlayerIdentifier,
     { tileKey }: PlayerTurnPayload
   ) {
-    const { result, winner } = this.gameLogic.play(playerId, tileKey);
+    const { result, winner: winnerId } = this.gameLogic.play(playerId, tileKey);
 
     if (result === PlaceResult.OutOfTurn) {
       this.socket(playerId).emit("invalidMove", {
@@ -77,8 +88,9 @@ export class Game {
       return;
     }
 
-    if (isNotNullOrUndefined(winner)) {
-      this.endGame({ winnerId: winner });
+    if (isNotNullOrUndefined(winnerId)) {
+      this.endGame({ winnerId });
+      this.onEndCallback?.({ winnerSocket: this.socket(winnerId) });
       return;
     }
 

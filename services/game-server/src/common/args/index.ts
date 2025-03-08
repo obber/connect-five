@@ -1,7 +1,4 @@
-import type {
-  CommandLineOptions,
-  OptionDefinition,
-} from "command-line-args";
+import type { CommandLineOptions, OptionDefinition } from "command-line-args";
 import commandLineArgs from "command-line-args";
 
 const CLI_ARGS_DEFINITION: OptionDefinition[] = [
@@ -14,4 +11,6 @@ interface Args extends CommandLineOptions {
   local?: boolean;
 }
 
-export const args: Args = commandLineArgs(CLI_ARGS_DEFINITION);
+export const args: Args = commandLineArgs(CLI_ARGS_DEFINITION, {
+  partial: true,
+});
