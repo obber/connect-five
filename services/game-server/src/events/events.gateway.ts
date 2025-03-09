@@ -13,10 +13,12 @@ import type {
   SocketData,
 } from "@c5/connection";
 import { Logger } from "@nestjs/common";
+import { secondsInMs } from "@c5/utils";
 import { CLIENT_ORIGIN, LOCAL_CLIENT_ORIGIN } from "../constants";
 import { args } from "../common/args";
 import { Queue } from "../queue/queue";
 import { Game } from "../game/game";
+import { delay } from "../../utils/delay";
 
 const logger = new Logger("events.gateway");
 
@@ -61,7 +63,7 @@ export class EventsGateway {
   handleEnqueue(@ConnectedSocket() client: ClientSocket) {
     logger.log("enqueue received");
     this.queue.enqueue({
-      userId: "foobar",
+      userId: client.id,
       socket: client,
     });
     return true;
@@ -74,8 +76,25 @@ export class EventsGateway {
     return `Received data = ${data}`;
   }
 
-  private onMatch(player1: Player, player2: Player) {
+  private async onMatch(player1: Player, player2: Player) {
     logger.log("onMatch");
+    player1.socket.emit("matchFound", {
+      you: {
+        userId: player1.userId,
+      },
+      them: {
+        userId: player2.userId,
+      },
+    });
+    player2.socket.emit("matchFound", {
+      you: {
+        userId: player1.userId,
+      },
+      them: {
+        userId: player2.userId,
+      },
+    });
+    await delay(secondsInMs(3));
     this.games.add(
       new Game(player1.socket, player2.socket).initialize({
         onEndCallback: () => {

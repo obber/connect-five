@@ -28,6 +28,12 @@ export default function Page() {
     console.info("emitting enqueue");
     const result = await socket?.emitWithAck("enqueue", "foobar");
     console.info("enqueue ack, result  = ", result);
+    socket?.on("matchFound", (payload) => {
+      console.log("match found payload = ", payload);
+    });
+    socket?.on("initGame", () => {
+      console.log("initGame!");
+    });
   };
 
   return (
