@@ -24,6 +24,13 @@ export class Queue<T extends QueuePlayer> {
   }
 
   enqueue(player: T) {
+    // Already in queue, do nothing. No need to send back an error because the
+    // desired state is the same thing as the side effect of calling this
+    // function.
+    if (this.waitingForGame.find(({ userId }) => userId === player.userId)) {
+      return;
+    }
+
     this.waitingForGame.push(player);
   }
 

@@ -4,6 +4,15 @@ import { Queue } from "./queue";
 jest.useFakeTimers();
 
 describe("Queue", () => {
+  it("should do nothing if already in queue", () => {
+    const onMatch = jest.fn();
+    const queue = new Queue().initialize({ onMatch });
+    queue.enqueue({ userId: "foo" });
+    queue.enqueue({ userId: "foo" });
+    jest.advanceTimersByTime(secondsInMs(3));
+    expect(onMatch).not.toHaveBeenCalled();
+  });
+
   it("should not match if there is only one person in the queue", () => {
     const onMatch = jest.fn();
     const queue = new Queue().initialize({ onMatch });
