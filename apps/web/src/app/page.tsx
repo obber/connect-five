@@ -17,9 +17,6 @@ export default function Page() {
   useEffect(() => {
     console.info("connecting");
     const sock = connect();
-    sock.on("noArg", () => {
-      console.info("RECEIVED: noArg");
-    });
 
     return () => {
       sock.off("noArg");
@@ -27,9 +24,10 @@ export default function Page() {
     };
   }, [connect]);
 
-  const handleClick = () => {
-    console.info("emitting hello. socket = ", socket);
-    socket?.emit("hello", "foobar!");
+  const handleClick = async () => {
+    console.info("emitting enqueue");
+    const result = await socket?.emitWithAck("enqueue", "foobar");
+    console.info("enqueue ack, result  = ", result);
   };
 
   return (
@@ -44,7 +42,7 @@ export default function Page() {
         </button>
       )}
       <button onClick={handleClick} type="button">
-        Click me
+        Queue me up!
       </button>
     </div>
   );

@@ -32,6 +32,8 @@ export enum InvalidMoveType {
 
 export interface ClientToServerEvents {
   hello: (data: string) => void;
+
+  enqueue: (data: string, ack: (data: string) => void) => void;
   initGameAck: () => void;
   playerTurn: (payload: PlayerTurnPayload) => void;
 }
