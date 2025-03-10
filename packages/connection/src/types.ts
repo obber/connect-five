@@ -58,9 +58,14 @@ export interface SocketData {
   age: number;
 }
 
+export interface PlayerBoardStateCell {
+  tileKey: TileKey;
+  relativePlayer: RelativePlayer | null;
+}
+
 export enum RelativePlayer {
   YOU = 0,
   THEM = 1,
 }
 
-export type PlayerBoardState = (RelativePlayer | null)[][];
+export type PlayerBoardState = PlayerBoardStateCell[][];

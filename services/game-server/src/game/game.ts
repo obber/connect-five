@@ -6,7 +6,7 @@ import type {
   PlayerTurnPayload,
   ServerToClientEvents,
 } from "@c5/connection";
-import { GameLogic, PlaceResult } from "@c5/game-logic";
+import { GameLogic, getTileKeyForIndices, PlaceResult } from "@c5/game-logic";
 import { isNotNullOrUndefined } from "@c5/utils";
 import { Logger } from "@nestjs/common";
 
@@ -174,15 +174,25 @@ export class Game {
 
   private getPlayerBoardState(playerId: PlayerIdentifier): PlayerBoardState {
     const opponentId = this.getOpponentPlayerId(playerId);
-    return this.gameLogic.getBoard().map((row) => {
-      return row.map((cell) => {
+    return this.gameLogic.getBoard().map((row, rowIndex) => {
+      return row.map((cell, columnIndex) => {
+        const tileKey = getTileKeyForIndices(rowIndex, columnIndex);
         if (cell === playerId) {
-          return RelativePlayer.YOU;
+          return {
+            tileKey,
+            relativePlayer: RelativePlayer.YOU,
+          };
         }
         if (cell === opponentId) {
-          return RelativePlayer.THEM;
+          return {
+            tileKey,
+            relativePlayer: RelativePlayer.THEM,
+          };
         }
-        return null;
+        return {
+          tileKey,
+          relativePlayer: null,
+        };
       });
     });
   }

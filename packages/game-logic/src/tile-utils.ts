@@ -16,3 +16,10 @@ export function getIndicesForTile(tile: TileKey) {
     columnIndex: Number(tile.slice(1)) - ONE_BASED_INDEX_OFFSET,
   };
 }
+
+export function getTileKeyForIndices(
+  rowIndex: number,
+  columnIndex: number
+): TileKey {
+  return `${String.fromCharCode(rowIndex + CHAR_CODE_FOR_A)}${columnIndex + ONE_BASED_INDEX_OFFSET}` as TileKey;
+}
