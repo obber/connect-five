@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useConnectionStore } from "@/features/connection/store";
 import { useSignIn } from "@/features/auth/hooks/use-sign-in";
 import { useSignOut } from "@/features/auth/hooks/use-sign-out";
 import { useIsSignedIn } from "@/features/auth/hooks/use-is-signed-in";
+import { Game } from "@/features/game/components/game";
 
 /* eslint-disable no-console -- fine */
 
@@ -13,6 +14,7 @@ export default function Page() {
   const signIn = useSignIn();
   const signOut = useSignOut();
   const isSignedIn = useIsSignedIn();
+  const [showGame, setShowGame] = useState(false);
 
   useEffect(() => {
     console.info("connecting");
@@ -32,9 +34,13 @@ export default function Page() {
       console.log("match found payload = ", payload);
     });
     socket?.on("initGame", () => {
-      console.log("initGame!");
+      setShowGame(true);
     });
   };
+
+  if (showGame) {
+    return <Game />;
+  }
 
   return (
     <div>

@@ -8,6 +8,9 @@ import type {
 } from "@c5/connection";
 import { GameLogic, PlaceResult } from "@c5/game-logic";
 import { isNotNullOrUndefined } from "@c5/utils";
+import { Logger } from "@nestjs/common";
+
+const logger = new Logger("Game");
 
 const PLAYER_1 = Symbol("player-1");
 const PLAYER_2 = Symbol("player-2");
@@ -64,6 +67,7 @@ export class Game {
   }
 
   private handleInitGameAck(playerId: PlayerIdentifier) {
+    logger.log(`handleInitGame ${String(playerId)}`);
     this.get(playerId).ready = true;
     this.maybeInitializeTurns();
   }
@@ -124,6 +128,7 @@ export class Game {
   }
 
   private doTurn(nextTurnPlayerId: PlayerIdentifier) {
+    logger.log(`doTurn, next = ${String(nextTurnPlayerId)}`);
     const { player, oppont } = this.getBoth(nextTurnPlayerId);
     player.turn = true;
     oppont.turn = false;
